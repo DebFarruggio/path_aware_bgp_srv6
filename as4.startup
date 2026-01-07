@@ -1,0 +1,23 @@
+sysctl -w net.ipv6.conf.all.forwarding=1
+sysctl -w net.ipv6.conf.default.disable_ipv6=0
+sysctl -w net.ipv6.conf.all.disable_ipv6=0
+sysctl -w net.ipv6.conf.all.seg6_enabled=1
+sysctl -w net.ipv6.conf.eth0.seg6_enabled=1
+sysctl -w net.ipv6.conf.eth1.seg6_enabled=1
+sysctl -w net.ipv6.conf.eth2.seg6_enabled=1
+sysctl -w net.ipv6.conf.eth3.seg6_enabled=1
+sysctl -w net.ipv6.conf.lo.seg6_enabled=1
+
+ip link set eth0 up
+ip link set eth1 up
+ip link set eth2 up
+ip link set eth3 up
+
+/etc/init.d/ssh start
+
+/shared/setup_ssh.sh
+
+/etc/init.d/frr start
+
+ip -6 route add 2001:db8:4000:: encap seg6local action End dev lo
+ip -6 route add 2001:db8:4000::1/48 encap seg6local action End.DT6 table main dev lo

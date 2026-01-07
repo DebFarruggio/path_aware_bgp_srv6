@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package srv6path;
+
+service SRv6PathService {
+  rpc RequestPath(PathRequest) returns (MultiplePathsResponse);
+  rpc InstallPath(InstallPathRequest) returns (PathResponse);
+  rpc ConfirmInstallation(InstallConfirm) returns (InstallResponse);
+}
+
+message PathRequest {
+  int32 source_asn = 1;
+  int32 destination_asn = 2;
+  bool only_trusted = 3;
+  string preferred_interface = 4;
+}
+
+message MultiplePathsResponse {
+  bool success = 1;
+  string error_message = 2;
+  repeated PathResponse paths = 3;
+  int32 total_paths = 4;
+}
+
+message InstallPathRequest {
+  int32 source_asn = 1;
+  int32 destination_asn = 2;
+  int32 path_index = 3;
+  bool only_trusted = 4;
+}
+
+message PathResponse {
+  bool success = 1;
+  string error_message = 2;
+
+  repeated int32 as_path = 3;
+  string path_string = 4;
+  int32 hops = 5;
+  
+  repeated string sid_list = 6;
+  string destination_network = 7;
+  string install_command = 8;
+  string output_interface = 9;
+  int32 metric = 10;
+  
+  repeated NodeInfo nodes = 11;
+  string transit_commands = 12;
+}
+
+message NodeInfo {
+  int32 asn = 1;
+  string hostname = 2;
+  string locator = 3;
+  bool is_trusted = 4;
+  string ipv4 = 5;
+  string ipv6 = 6;
+}
+
+message InstallConfirm {
+  int32 source_asn = 1;
+  int32 destination_asn = 2;
+  bool installed = 3;
+  string error_message = 4;
+  string command_executed = 5;
+}
+
+message InstallResponse {
+  bool success = 1;
+  string message = 2;
+}

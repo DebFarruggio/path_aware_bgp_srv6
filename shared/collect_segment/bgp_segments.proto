@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package bgp_segments;
+
+service BgpPathService {
+  rpc ReportBgpData(BgpDataRequest) returns (BgpDataResponse) {}
+}
+
+message BgpDataRequest {
+  uint32 local_asn = 1;                    
+  repeated Segment segments = 2;           
+  repeated AsPath paths = 3;               
+  repeated Network networks = 4;            
+}
+
+message BgpDataResponse {
+  bool success = 1;
+  string message = 2;
+  uint32 total_segments_stored = 3;        
+}
+
+message Segment {
+  uint32 as_a = 1;                         
+  uint32 as_b = 2;                         
+}
+
+message AsPath {
+  repeated uint32 as_sequence = 1;
+}
+
+message Network {
+  string network = 1;                      
+  string interface = 2;                    
+  bool is_ipv6 = 3;                        
+}

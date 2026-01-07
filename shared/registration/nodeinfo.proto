@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+message NodeInfoMessage {
+    string hostname = 1;
+    string ipv4 = 2;
+    string ipv6 = 3;
+    int32 router_bgp = 4;
+    string locator = 5;
+    string timestamp = 6;
+    string networks = 7;  
+}
+
+message NodeInfoResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+service NodeInfoService {
+    rpc RegisterNode (NodeInfoMessage) returns (NodeInfoResponse);
+}
